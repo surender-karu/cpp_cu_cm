@@ -1,8 +1,8 @@
 cmake_minimum_required(VERSION 3.20.0)
 
 # set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -stdlib=libc++")
-# set(CMAKE_CUDA_COMPILER clang++)
-# set(CMAKE_CUDA_ARCHITECTURES 86)
+set(CMAKE_CUDA_COMPILER clang++)
+set(CMAKE_CUDA_ARCHITECTURES 86)
 
 project(cpp_cu_cm VERSION 0.2.0
                DESCRIPTION "CPP Fin"
@@ -27,6 +27,8 @@ if (CUDAToolkit_FOUND)
     message(STATUS "Found CUDA ${CUDAToolkit_VERSION}")
     message(STATUS "CUDA include dir: ${CUDAToolkit_INCLUDE_DIRS}")
 endif()
+
+file(MAKE_DIRECTORY bin)
 
 # add_link_options("-fuse-ld=lld")
 

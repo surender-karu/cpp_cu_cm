@@ -7,7 +7,5 @@
 
 void add();
 void queryDevice();
-void matrixAdd(float *A, float *B, float *C, int n, int grid_size, int block_size);
 
 #endif
-

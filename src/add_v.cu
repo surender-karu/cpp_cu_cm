@@ -1,7 +1,7 @@
 #include "cuda_common.cuh"
 
 // function to add the elements of two arrays
-__global__ void add(int n, float *x, float *y) {
+__global__ void add(int n, const float *x, float *y) {
   int index = threadIdx.x + blockIdx.x * blockDim.x;
   int stride = blockDim.x * gridDim.x;
   for (int i = index; i < n; i += stride)
@@ -13,20 +13,20 @@ void add() {
   int blockSize = 256;
   int numBlocks = (N + blockSize - 1) / blockSize;
 
-  float *x, *y;
+  float *h_x, *h_y;
 
   // Allocate Unified Memory – accessible from CPU or GPU
-  cudaMallocManaged(&x, N * sizeof(float));
-  cudaMallocManaged(&y, N * sizeof(float));
+  cudaMallocManaged(&h_x, N * sizeof(float));
+  cudaMallocManaged(&h_y, N * sizeof(float));
 
   // initialize x and y arrays on the host
   for (int i = 0; i < N; i++) {
-    x[i] = 1.0f;
-    y[i] = 2.0f;
+    h_x[i] = 1.0f;
+    h_y[i] = 2.0f;
   }
 
   // Run kernel on 1M elements on the CPU
-  add<<<numBlocks, blockSize>>>(N, x, y);
+  add<<<numBlocks, blockSize>>>(N, h_x, h_y);
 
   // Wait for GPU to finish before accessing on host
   cudaDeviceSynchronize();
@@ -34,11 +34,11 @@ void add() {
   // Check for errors (all values should be 3.0f)
   float maxError = 0.0f;
   for (int i = 0; i < N; i++) {
-    maxError = fmax(maxError, fabs(y[i] - 3.0f));
+    maxError = fmax(maxError, fabs(h_y[i] - 3.0f));
   }
   std::cout << "Max error: " << maxError << std::endl;
 
   // Free memory
-  cudaFree(x);
-  cudaFree(y);
+  cudaFree(h_x);
+  cudaFree(h_y);
 }

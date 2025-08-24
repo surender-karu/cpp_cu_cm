@@ -1,14 +1,16 @@
 cmake_minimum_required(VERSION 3.20.0)
 
-# set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -stdlib=libc++")
-set(CMAKE_CUDA_COMPILER clang++)
+set(CMAKE_CUDA_STANDARD 17)
+
+set(CMAKE_CUDA_COMPILER "/usr/bin/clang++")
 set(CMAKE_CUDA_ARCHITECTURES 86)
+SET(CMAKE_COMPILER_FLAGS "-stdlib=libc++")
 
 project(cpp_cu_cm VERSION 0.2.0
                DESCRIPTION "CPP Fin"
                LANGUAGES C CXX CUDA)
 
-#set(CMAKE_VERBOSE_MAKEFILE ON)
+# set(CMAKE_VERBOSE_MAKEFILE ON)
 
 find_package(LLVM REQUIRED CONFIG)
 find_package(OpenMP 5.0 REQUIRED COMPONENTS CXX)
@@ -29,8 +31,6 @@ if (CUDAToolkit_FOUND)
 endif()
 
 file(MAKE_DIRECTORY bin)
-
-# add_link_options("-fuse-ld=lld")
 
 include_directories(include)
 file(GLOB SOURCES "src/*.cpp" "src/*.cu")

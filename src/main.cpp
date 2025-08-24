@@ -3,7 +3,7 @@
 using namespace cpp_fin;
 
 int main(int, char **) {
-    // queryDevice();
+    queryDevice();
 
     cuAddMatrix();
     std::cin.get();
